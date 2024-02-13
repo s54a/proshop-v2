@@ -54,8 +54,8 @@ const Rating = ({ value, text }) => {
   );
 };
 Rating.propTypes = {
-  value: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
+  value: PropTypes.number,
+  text: PropTypes.string,
 };
 
 export default Rating;
