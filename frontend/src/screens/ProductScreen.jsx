@@ -22,7 +22,7 @@ const ProductScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { qty, setQty } = useState(1);
+  const [qty, setQty] = useState(1);
 
   const {
     data: product,
