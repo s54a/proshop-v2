@@ -8,8 +8,6 @@ export const updateCart = (state) => {
     state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   );
 
-  console.log(state.itemPrice);
-
   // Calculate Shipping Price (If order is over $100 then free shipping or else $10)
   state.shippingPrice = addDecimals(state.itemPrice > 100 ? 0 : 10);
 
