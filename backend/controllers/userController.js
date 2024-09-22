@@ -109,21 +109,29 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-
+    // Check and update fields directly
+    if (req.body.name && req.body.name !== user.name) {
+      user.name = req.body.name; // Update name
+    }
+    if (req.body.email && req.body.email !== user.email) {
+      user.email = req.body.email; // Update email
+    }
     if (req.body.password) {
-      user.password = req.body.password;
+      user.password = req.body.password; // Update password
     }
 
-    const updatedUser = await user.save();
-
-    res.status(201).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-    });
+    // Only save if there are changes
+    if (req.body.name || req.body.email || req.body.password) {
+      const updatedUser = await user.save();
+      res.status(201).json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      });
+    } else {
+      res.status(200).json({ message: "No changes made" });
+    }
   } else {
     res.status(400);
     throw new Error("User Not Found");
