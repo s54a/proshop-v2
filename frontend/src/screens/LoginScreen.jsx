@@ -69,8 +69,6 @@ const LoginScreen = () => {
         <Button variant="primary" type="submit" disabled={isLoading}>
           Sign In
         </Button>
-
-        {isLoading && <Loader fullPage={false} />}
       </Form>
 
       <Row className="py-3">
@@ -81,6 +79,7 @@ const LoginScreen = () => {
           </Link>
         </Col>
       </Row>
+      {isLoading && <Loader fullPage={false} />}
     </FormContainer>
   );
 };
