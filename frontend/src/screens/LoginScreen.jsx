@@ -70,7 +70,7 @@ const LoginScreen = () => {
           Sign In
         </Button>
 
-        {isLoading && <Loader />}
+        {isLoading && <Loader fullPage={false} />}
       </Form>
 
       <Row className="py-3">

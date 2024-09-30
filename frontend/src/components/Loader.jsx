@@ -1,44 +1,29 @@
-// import { Spinner } from "react-bootstrap";
-
-// const Loader = () => {
-//   return (
-//     <div
-//       style={{
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "center",
-//         height: "100vh",
-//       }}
-//     >
-//       <Spinner
-//         animation="border"
-//         role="status"
-//         style={{
-//           width: "75px",
-//           height: "75px",
-//         }}
-//       />
-//     </div>
-//   );
-// };
-
-// export default Loader;
-
-// Old if someday it creates some error
 import { Spinner } from "react-bootstrap";
 
-const Loader = () => {
+const Loader = ({ fullPage = true }) => {
+  const spinnerStyle = {
+    width: "100px",
+    height: "100px",
+  };
+
+  if (fullPage) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh" }}
+      >
+        <Spinner animation="border" role="status" style={spinnerStyle} />
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    );
+  }
+
   return (
-    <Spinner
-      animation="border"
-      role="status"
-      style={{
-        width: "75px",
-        height: "75px",
-        margin: "auto",
-        display: "block",
-      }}
-    />
+    <div className="d-flex justify-content-center my-3">
+      <Spinner animation="border" role="status" style={spinnerStyle} />
+      <span className="visually-hidden">Loading...</span>
+    </div>
   );
 };
+
 export default Loader;
