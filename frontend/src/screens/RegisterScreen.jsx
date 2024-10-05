@@ -96,7 +96,12 @@ const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button variant="primary" type="submit" disabled={isLoading}>
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={isLoading}
+          className="my-2 w-100 font-bold"
+        >
           Register
         </Button>
       </Form>

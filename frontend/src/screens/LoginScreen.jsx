@@ -66,7 +66,12 @@ const LoginScreen = () => {
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
-        <Button variant="primary" type="submit" disabled={isLoading}>
+        <Button
+          variant="primary"
+          type="submit"
+          className="my-2 w-100 font-bold"
+          disabled={isLoading}
+        >
           Sign In
         </Button>
       </Form>
