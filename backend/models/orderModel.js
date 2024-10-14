@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema(
       email_address: { type: String },
     },
 
-    itemPrice: {
+    itemsPrice: {
       type: Number,
       required: true,
       default: 0.0,
