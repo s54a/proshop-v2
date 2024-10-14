@@ -13,7 +13,6 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
 
-  const dispatch = useDispatch();
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   useEffect(() => {
@@ -24,6 +23,7 @@ const PlaceOrderScreen = () => {
     }
   }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
 
+  const dispatch = useDispatch();
   const placeOrderHandler = async () => {
     try {
       const res = await createOrder({
@@ -109,29 +109,29 @@ const PlaceOrderScreen = () => {
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Items:</Col>
-                  <Col>{cart.itemsPrice}</Col>
+                  <Col>Items</Col>
+                  <Col>$ {cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping:</Col>
-                  <Col>{cart.shippingPrice}</Col>
+                  <Col>Shipping</Col>
+                  <Col>$ {cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax:</Col>
-                  <Col>{cart.taxPrice}</Col>
+                  <Col>Tax</Col>
+                  <Col>$ {cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Total:</Col>
-                  <Col>{cart.totalPrice}</Col>
+                  <Col>Total</Col>
+                  <Col>$ {cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
               {error && (
@@ -144,7 +144,7 @@ const PlaceOrderScreen = () => {
                 <Button
                   type="button"
                   className="btn-block"
-                  disabled={cart.cartItems.length === 0}
+                  disabled={cart.cartItems === 0}
                   onClick={placeOrderHandler}
                 >
                   Place Order
