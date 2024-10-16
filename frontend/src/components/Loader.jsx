@@ -4,6 +4,7 @@ const Loader = ({ fullPage = true }) => {
   const spinnerStyle = {
     width: "100px",
     height: "100px",
+    color: "#7b8a8b",
   };
 
   if (fullPage) {

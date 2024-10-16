@@ -24,6 +24,19 @@ const PlaceOrderScreen = () => {
   }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
 
   const dispatch = useDispatch();
+
+  const consoleLog = {
+    orderItems: cart.cartItems,
+    shippingAddress: cart.shippingAddress,
+    paymentMethod: cart.paymentMethod,
+    itemsPrice: cart.itemsPrice,
+    shippingPrice: cart.shippingPrice,
+    taxPrice: cart.taxPrice,
+    totalPrice: cart.totalPrice,
+  };
+
+  console.log(consoleLog);
+
   const placeOrderHandler = async () => {
     try {
       const res = await createOrder({
@@ -149,7 +162,7 @@ const PlaceOrderScreen = () => {
                 >
                   Place Order
                 </Button>
-                {isLoading && <Loader />}
+                {isLoading && <Loader fullPage={false} />}
               </ListGroup.Item>
             </ListGroup>
           </Card>
