@@ -17,6 +17,18 @@ const addOrderItems = asyncHandler(async (req, res) => {
     totalPrice,
   } = req.body;
 
+  const dsf = {
+    orderItems: cart.cartItems,
+    shippingAddress: cart.shippingAddress,
+    paymentMethod: cart.paymentMethod,
+    itemsPrice: cart.itemsPrice,
+    taxPrice: cart.taxPrice,
+    shippingPrice: cart.shippingPrice,
+    totalPrice: cart.totalPrice,
+  };
+  console.log(dsf);
+  console.log(req.body);
+
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error("Order Item is required");

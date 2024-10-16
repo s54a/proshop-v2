@@ -7,18 +7,20 @@ import FormContainer from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
 
 const PaymentScreen = () => {
-  const [paymentMethod, setPaymentMethod] = useState("Paypal");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { shippingAddress } = useSelector((state) => state.cart);
+  // const { shippingAddress } = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress } = cart;
 
   useEffect(() => {
-    if (!shippingAddress) {
+    if (!shippingAddress.address) {
       navigate("/shipping");
     }
-  }, [shippingAddress, navigate]);
+  }, [navigate, shippingAddress]);
+
+  const [paymentMethod, setPaymentMethod] = useState("Paypal");
 
   const submitHandler = (e) => {
     e.preventDefault();
