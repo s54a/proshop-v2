@@ -6,33 +6,40 @@ import Order from "../models/orderModel.js";
  * @route Post /api/orders
  * @access Private
  */
+
 const addOrderItems = asyncHandler(async (req, res) => {
-  const {
-    orderItems,
-    shippingAddress,
-    paymentMethod,
-    itemsPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice,
-  } = req.body;
+  try {
+    // console.log("Received order data:", req.body);
 
-  const dsf = {
-    orderItems: cart.cartItems,
-    shippingAddress: cart.shippingAddress,
-    paymentMethod: cart.paymentMethod,
-    itemsPrice: cart.itemsPrice,
-    taxPrice: cart.taxPrice,
-    shippingPrice: cart.shippingPrice,
-    totalPrice: cart.totalPrice,
-  };
-  console.log(dsf);
-  console.log(req.body);
+    const {
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+    } = req.body;
 
-  if (orderItems && orderItems.length === 0) {
-    res.status(400);
-    throw new Error("Order Item is required");
-  } else {
+    if (!orderItems || orderItems.length === 0) {
+      res.status(400);
+      throw new Error("Order Items are required");
+    }
+
+    // Log each field to check for undefined values
+    // console.log("orderItems:", orderItems);
+    // console.log("shippingAddress:", shippingAddress);
+    // console.log("paymentMethod:", paymentMethod);
+    // console.log("itemsPrice:", itemsPrice);
+    // console.log("taxPrice:", taxPrice);
+    // console.log("shippingPrice:", shippingPrice);
+    // console.log("totalPrice:", totalPrice);
+
+    if (!req.user || !req.user._id) {
+      res.status(401);
+      throw new Error("User not authenticated");
+    }
+
     const order = new Order({
       orderItems: orderItems.map((x) => ({
         ...x,
@@ -47,10 +54,21 @@ const addOrderItems = asyncHandler(async (req, res) => {
       shippingPrice,
       totalPrice,
     });
-    const createOrder = await order.save();
-    res.status(201).json(createOrder);
+
+    // console.log("Created order object:", order);
+
+    const createdOrder = await order.save();
+    // console.log("Order saved successfully:", createdOrder);
+
+    res.status(201).json(createdOrder);
+  } catch (error) {
+    console.error("Error in addOrderItems:", error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+      stack: error.stack,
+    });
   }
-  // res.send("addOrderItems");
 });
 
 /**

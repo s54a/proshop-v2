@@ -30,7 +30,8 @@ const orderSchema = new mongoose.Schema(
     },
 
     paymentMethod: {
-      paymentMethod: { type: String, required: true },
+      type: String,
+      required: true,
     },
 
     paymentResult: {
@@ -58,7 +59,7 @@ const orderSchema = new mongoose.Schema(
       default: 0.0,
     },
 
-    TotalPrice: {
+    totalPrice: {
       type: Number,
       required: true,
       default: 0.0,
@@ -80,7 +81,7 @@ const orderSchema = new mongoose.Schema(
       default: false,
     },
 
-    isDelivered: {
+    deliveredAt: {
       type: Date,
     },
   },

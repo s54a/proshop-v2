@@ -25,21 +25,9 @@ const PlaceOrderScreen = () => {
 
   const dispatch = useDispatch();
 
-  const consoleLog = {
-    orderItems: cart.cartItems,
-    shippingAddress: cart.shippingAddress,
-    paymentMethod: cart.paymentMethod,
-    itemsPrice: cart.itemsPrice,
-    shippingPrice: cart.shippingPrice,
-    taxPrice: cart.taxPrice,
-    totalPrice: cart.totalPrice,
-  };
-
-  console.log(consoleLog);
-
   const placeOrderHandler = async () => {
     try {
-      const res = await createOrder({
+      const orderData = {
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
@@ -47,12 +35,16 @@ const PlaceOrderScreen = () => {
         taxPrice: cart.taxPrice,
         shippingPrice: cart.shippingPrice,
         totalPrice: cart.totalPrice,
-      }).unwrap();
+      };
+
+      // console.log("Sending order data:", orderData);
+
+      const res = await createOrder(orderData).unwrap();
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (error) {
-      console.log(error);
-      toast.error(error);
+      // console.error("Error placing while order:", error);
+      toast.error(error?.data?.message || error.error);
     }
   };
 
