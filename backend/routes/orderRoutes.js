@@ -1,5 +1,4 @@
 import express from "express";
-const router = express.Router();
 import {
   addOrderItems,
   getMyOrders,
@@ -9,6 +8,8 @@ import {
   getOrders,
 } from "../controllers/orderController.js";
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
+
+const router = express.Router();
 
 router.route("/").post(protect, addOrderItems).get(protect, isAdmin, getOrders);
 router.route("/mine").get(protect, getMyOrders);

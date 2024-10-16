@@ -17,7 +17,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     totalPrice,
   } = req.body;
 
-  if (orderItems && orderItems.length > 0) {
+  if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error("Order Item is required");
   } else {
@@ -35,11 +35,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
       shippingPrice,
       totalPrice,
     });
-
     const createOrder = await order.save();
-
     res.status(201).json(createOrder);
   }
+  // res.send("addOrderItems");
 });
 
 /**

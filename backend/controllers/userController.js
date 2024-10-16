@@ -152,8 +152,8 @@ const getUsers = asyncHandler(async (req, res) => {
  * @route   GET /api/users/:id
  * @access  Private/Admin
  */
-const getUsersByID = asyncHandler(async (req, res) => {
-  res.send("getUsersByID");
+const getUserByID = asyncHandler(async (req, res) => {
+  res.send("getUserByID");
 });
 
 /**
@@ -181,7 +181,7 @@ export {
   getUserProfile,
   updateUserProfile,
   getUsers,
-  getUsersByID,
+  getUserByID,
   deleteUser,
   updateUser,
 };

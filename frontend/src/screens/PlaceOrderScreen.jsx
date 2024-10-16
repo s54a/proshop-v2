@@ -31,8 +31,8 @@ const PlaceOrderScreen = () => {
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
-        shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
+        shippingPrice: cart.shippingPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
       dispatch(clearCartItems());
@@ -155,6 +155,13 @@ const PlaceOrderScreen = () => {
           </Card>
         </Col>
       </Row>
+      <div>Order Items: {JSON.stringify(cart.cartItems)}</div>
+      <div>Shipping Address: {JSON.stringify(cart.shippingAddress)}</div>
+      <div>Payment Method: {cart.paymentMethod}</div>
+      <div>Items Price: ${cart.itemsPrice}</div>
+      <div>Tax Price: ${cart.taxPrice}</div>
+      <div>Shipping Price: ${cart.shippingPrice}</div>
+      <div>Total Price: ${cart.totalPrice}</div>
     </>
   );
 };
