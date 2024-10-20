@@ -92,7 +92,7 @@ const getMyOrdersById = asyncHandler(async (req, res) => {
     "name email"
   );
 
-  if (order) {
+  if (orders) {
     res.status(200).json(orders);
   } else {
     res.status(404);
