@@ -160,13 +160,13 @@ const PlaceOrderScreen = () => {
           </Card>
         </Col>
       </Row>
-      <div>Order Items: {JSON.stringify(cart.cartItems)}</div>
+      {/* <div>Order Items: {JSON.stringify(cart.cartItems)}</div>
       <div>Shipping Address: {JSON.stringify(cart.shippingAddress)}</div>
       <div>Payment Method: {cart.paymentMethod}</div>
       <div>Items Price: ${cart.itemsPrice}</div>
       <div>Tax Price: ${cart.taxPrice}</div>
       <div>Shipping Price: ${cart.shippingPrice}</div>
-      <div>Total Price: ${cart.totalPrice}</div>
+      <div>Total Price: ${cart.totalPrice}</div> */}
     </>
   );
 };
