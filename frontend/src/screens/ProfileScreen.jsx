@@ -123,10 +123,25 @@ const ProfileScreen = () => {
               <tr>
                 <th>ID</th>
                 <th>Date</th>
+                <th>Product Details</th>
                 <th>Total</th>
                 <th>Paid</th>
                 <th>Delivered</th>
                 <th></th>
+              </tr>
+              <tr>
+                <th colSpan="2"></th>
+                <th>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <span>Image</span>
+                    <span>Name</span>
+                    <span>Qty</span>
+                    <span>Price</span>
+                  </div>
+                </th>
+                <th colSpan="3"></th>
               </tr>
             </thead>
             <tbody>
@@ -134,24 +149,62 @@ const ProfileScreen = () => {
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{new Date(order.createdAt).toLocaleString()}</td>
+                  <td>
+                    <ul style={{ listStyle: "none", padding: 0 }}>
+                      {order.orderItems.map((item) => (
+                        <li
+                          key={item._id}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              marginRight: "10px",
+                            }}
+                            title={item.name}
+                          />
+                          <span
+                            style={{
+                              width: "100px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                            title={item.name}
+                          >
+                            {item.name}
+                          </span>
+                          <span>Qty: {item.qty}</span>
+                          <span>Price: ${item.price.toFixed(2)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
                   <td>{order.totalPrice}</td>
                   <td>
                     {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
+                      new Date(order.paidAt).toLocaleString()
                     ) : (
                       <FaTimes style={{ color: "red" }} />
                     )}
                   </td>
                   <td>
                     {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
+                      new Date(order.deliveredAt).toLocaleString()
                     ) : (
                       <FaTimes style={{ color: "red" }} />
                     )}
                   </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>
-                      <Button className="btn-sm " variant="light">
+                      <Button className="btn-sm" variant="light">
                         Details
                       </Button>
                     </LinkContainer>
