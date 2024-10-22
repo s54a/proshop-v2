@@ -8,7 +8,7 @@ import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
   useGetPaypalClientIdQuery,
-} from "../slices/orderApiSlice";
+} from "../slices/ordersApiSlice";
 import { toast } from "react-toastify";
 // import { useSelector } from "react-redux";
 
