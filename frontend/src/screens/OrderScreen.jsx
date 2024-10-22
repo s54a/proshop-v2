@@ -100,7 +100,7 @@ const OrderScreen = () => {
   ) : (
     <>
       <h1>Order Details</h1>
-      {/* <h1>Order {order._id}</h1> */}
+      <h3>Id {order._id}</h3>
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
