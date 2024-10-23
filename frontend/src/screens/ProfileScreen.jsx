@@ -166,6 +166,7 @@ const ProfileScreen = () => {
                   <td style={{ textAlign: "center", verticalAlign: "middle" }}>
                     {order._id}
                   </td>
+
                   <td
                     style={{
                       textAlign: "center",
@@ -177,6 +178,7 @@ const ProfileScreen = () => {
                       .toLocaleString()
                       .replace(",", ",\n")}
                   </td>
+
                   <td>
                     <ul
                       style={{
@@ -224,6 +226,7 @@ const ProfileScreen = () => {
                       ))}
                     </ul>
                   </td>
+
                   <td
                     style={{
                       textAlign: "center",
@@ -233,6 +236,7 @@ const ProfileScreen = () => {
                   >
                     {order.totalPrice}
                   </td>
+
                   <td
                     style={{
                       textAlign: "center",
@@ -264,6 +268,7 @@ const ProfileScreen = () => {
                       <FaTimes style={{ color: "red" }} />
                     )}
                   </td>
+
                   <td
                     style={{
                       textAlign: "center",
