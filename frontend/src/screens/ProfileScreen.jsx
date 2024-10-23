@@ -118,39 +118,73 @@ const ProfileScreen = () => {
             {error?.data?.message || error?.message || error.error}
           </Message>
         ) : (
-          <Table striped bordered hover responsive className="table-sm">
+          <Table
+            striped
+            bordered
+            hover
+            responsive
+            className="table-sm"
+            style={{
+              width: "120%",
+              margin: "0 auto",
+              borderCollapse: "collapse",
+            }}
+          >
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Date</th>
-                <th>Product Details</th>
+                <th style={{ width: "30%" }}>Product Details</th>
                 <th>Total</th>
                 <th>Paid</th>
                 <th>Delivered</th>
                 <th></th>
               </tr>
               <tr>
-                <th colSpan="2"></th>
+                <th colSpan="0"></th>
+                <th colSpan="1"></th>
                 <th>
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{ display: "flex", justifyContent: "space-around" }}
                   >
                     <span>Image</span>
                     <span>Name</span>
                     <span>Qty</span>
                     <span>Price</span>
+                    <span>Tax</span>
                   </div>
                 </th>
+                <th></th>
+                <th></th>
+                <th></th>
                 <th colSpan="3"></th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order) => (
                 <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{new Date(order.createdAt).toLocaleString()}</td>
+                  <td style={{ textAlign: "center", verticalAlign: "middle" }}>
+                    {order._id}
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      whiteSpace: "pre-line", // This allows line breaks
+                    }}
+                  >
+                    {new Date(order.createdAt)
+                      .toLocaleString()
+                      .replace(",", ",\n")}
+                  </td>
                   <td>
-                    <ul style={{ listStyle: "none", padding: 0 }}>
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        margin: "1rem 0.5rem",
+                        padding: "0",
+                      }}
+                    >
                       {order.orderItems.map((item) => (
                         <li
                           key={item._id}
@@ -181,28 +215,62 @@ const ProfileScreen = () => {
                           >
                             {item.name}
                           </span>
-                          <span>Qty: {item.qty}</span>
-                          <span>Price: ${item.price.toFixed(2)}</span>
+                          <span>{item.qty}</span>
+                          <span> x </span>
+                          <span>${item.price.toFixed(2)}</span>
+                          <span> + </span>
+                          <span>${order.taxPrice.toFixed(2)}</span>
                         </li>
                       ))}
                     </ul>
                   </td>
-                  <td>{order.totalPrice}</td>
-                  <td>
+                  <td
+                    style={{
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      padding: "0 0.5rem",
+                    }}
+                  >
+                    {order.totalPrice}
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      whiteSpace: "pre-line",
+                    }}
+                  >
                     {order.isPaid ? (
-                      new Date(order.paidAt).toLocaleString()
+                      new Date(order.paidAt)
+                        .toLocaleString()
+                        .replace(",", ",\n")
                     ) : (
                       <FaTimes style={{ color: "red" }} />
                     )}
                   </td>
-                  <td>
+
+                  <td
+                    style={{
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      whiteSpace: "pre-line",
+                    }}
+                  >
                     {order.isDelivered ? (
-                      new Date(order.deliveredAt).toLocaleString()
+                      new Date(order.deliveredAt)
+                        .toLocaleString()
+                        .replace(",", ",\n")
                     ) : (
                       <FaTimes style={{ color: "red" }} />
                     )}
                   </td>
-                  <td>
+                  <td
+                    style={{
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      padding: "0 1rem",
+                    }}
+                  >
                     <LinkContainer to={`/order/${order._id}`}>
                       <Button className="btn-sm" variant="light">
                         Details
