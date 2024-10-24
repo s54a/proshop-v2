@@ -19,8 +19,13 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm m-3">
-            <FaEdit /> Create Product
+          <Button
+            style={{
+              padding: "0.5rem 1rem",
+            }}
+            className="btn-sm my-4"
+          >
+            Create Product
           </Button>
         </Col>
       </Row>
