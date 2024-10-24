@@ -35,13 +35,12 @@ const getProductsById = asyncHandler(async (req, res) => {
 const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: "Sample Name",
-    Price: 0,
+    price: 0,
     user: req.user._id,
     image: "/images/sample.jpg",
     brand: "Sample Brand",
     category: "Sample Category",
     countInStock: 0,
-    rating: 0,
     numReviews: 0,
     description: "Sample Description",
   });
@@ -50,4 +49,38 @@ const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(createdProduct);
 });
 
-export { getProducts, getProductsById, createProduct };
+/**
+ * @desc Update a Product
+ * @route Put /api/products/:id
+ * @access Private/Admin
+ */
+const updateProduct = asyncHandler(async (req, res) => {
+  try {
+    const { name, price, description, image, brand, category, countInStock } =
+      req.body;
+
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+      product.name = name;
+      product.price = price;
+      product.description = description;
+      product.image = image;
+      product.brand = brand;
+      product.category = category;
+      product.countInStock = countInStock;
+
+      const updatedProduct = await product.save();
+      res.json(updatedProduct);
+    } else {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+  } catch (error) {
+    res.status(1500);
+    console.log(error);
+    throw new Error(error?.message);
+  }
+});
+
+export { getProducts, getProductsById, createProduct, updateProduct };
