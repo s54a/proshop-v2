@@ -3,13 +3,29 @@ import { FaTimes, FaEdit, FaTrash } from "react-icons/fa";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { useGetProductsQuery } from "../../slices/productApiSlice";
+import { toast } from "react-toastify";
+import {
+  useGetProductsQuery,
+  useCreateProductMutation,
+} from "../../slices/productApiSlice";
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
 
   const deleteHandler = async (id) => {
     console.log(id);
+  };
+
+  const createProductHandler = async () => {
+    if (window.confirm("Are you sure you want to create a new product?")) {
+      try {
+        await createProduct();
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error?.error);
+      }
+    }
   };
 
   return (
@@ -20,6 +36,7 @@ const ProductListScreen = () => {
         </Col>
         <Col className="text-end">
           <Button
+            onClick={createProductHandler}
             style={{
               padding: "0.5rem 1rem",
             }}
@@ -29,6 +46,8 @@ const ProductListScreen = () => {
           </Button>
         </Col>
       </Row>
+
+      {isCreating && <Loader />}
 
       {isLoading ? (
         <Loader />
