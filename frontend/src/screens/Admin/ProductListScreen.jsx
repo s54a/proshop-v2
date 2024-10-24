@@ -93,7 +93,7 @@ const ProductListScreen = () => {
                     verticalAlign: "middle",
                   }}
                 >
-                  <LinkContainer to={`/product/${product._id}`}>
+                  <LinkContainer to={`/admin/productList/${product._id}/edit`}>
                     <Button className="btn-sm m-2" variant="light">
                       <FaEdit />
                     </Button>
