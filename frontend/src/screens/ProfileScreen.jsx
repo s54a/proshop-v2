@@ -62,7 +62,7 @@ const ProfileScreen = () => {
           <Form.Group controlId="name" className="my-2">
             <Form.Label>Name</Form.Label>
             <Form.Control
-              type="name"
+              type="text"
               placeholder="Enter Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
