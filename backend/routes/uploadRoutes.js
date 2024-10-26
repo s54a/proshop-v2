@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import express from "express";
 import multer from "multer";
@@ -16,28 +17,49 @@ const storage = multer.diskStorage({
   },
 });
 
-function checkFileType(file, cb) {
-  const fileTypes = /jpg|jpeg|png/;
+function fileFilter(req, file, cb) {
+  const filetypes = /jpe?g|png|webp/;
+  const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
 
-  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = mimetypes.test(file.mimetype);
 
-  const mimeType = fileTypes.test(file.mimeType);
-
-  if (extname && mimeType) {
-    return cb(null, true);
+  if (extname && mimetype) {
+    cb(null, true);
   } else {
     cb("Images only!");
+    // cb(new Error("Images only!"), false);
   }
 }
 
-const upload = multer({
-  storage,
-});
+const upload = multer({ storage, fileFilter });
+const uploadSingleImage = upload.single("image");
 
-router.post("/", upload.single("image"), (req, res) => {
-  res.send({
-    message: "Image Uploaded!",
-    image: `/${req.file.path}`,
+router.post("/", (req, res) => {
+  uploadSingleImage(req, res, function (err) {
+    if (err) {
+      return res.status(400).send({ message: err.message });
+    }
+
+    // Normalize the path using path.posix to ensure forward slashes
+    const imagePath = path.posix.join(
+      "/",
+      req.file.path.split(path.sep).join("/")
+    );
+
+    // Removes / from in front of the upload word
+    // const imagePath = req.file.path.split(path.sep).join("/");
+
+    res.status(200).send({
+      message: "Image uploaded successfully",
+      image: imagePath,
+      // image: `/${req.file.path}`,
+    });
+    console.log(req.file.path, imagePath);
+    const __dirname = path.resolve();
+    console.log("Full image path:", path.join(__dirname, req.file.path));
+    const imagePath2 = path.join(__dirname, req.file.path);
+    console.log("Image exists:", fs.existsSync(imagePath2));
   });
 });
 

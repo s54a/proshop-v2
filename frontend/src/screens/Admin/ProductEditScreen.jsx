@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import {
   useUpdateProductMutation,
   useGetProductDetailsQuery,
+  useUploadProductImageMutation,
 } from "../../slices/productApiSlice";
 
 const ProductEditScreen = () => {
@@ -22,13 +23,16 @@ const ProductEditScreen = () => {
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
 
-  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
-
   const {
     data: product,
     isLoading,
     error,
   } = useGetProductDetailsQuery(productId);
+
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+
+  const [uploadProductImage, { isLoading: imageUploadLoading }] =
+    useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -46,19 +50,18 @@ const ProductEditScreen = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedProduct = {
-      productId,
-      name,
-      price,
-      image,
-      brand,
-      category,
-      countInStock,
-      description,
-    };
 
     try {
-      const res = await updateProduct(updatedProduct);
+      const res = await updateProduct({
+        productId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        countInStock,
+        description,
+      });
       if (res.error) {
         toast.error(res.error);
       } else {
@@ -70,6 +73,30 @@ const ProductEditScreen = () => {
         error?.data?.message || error?.error || "Something went wrong"
       );
       console.error(error);
+    }
+  };
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    // const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"]; // Add valid file types here
+    // if (file && !validTypes.includes(file.type)) {
+    //   toast.error("Invalid file type. Please upload an image.");
+    //   e.target.value = "";
+    //   return;
+    // }
+
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (error) {
+      e.target.value = "";
+      toast.error(
+        error?.data?.message || error?.error || "Something went wrong"
+      );
+      console.log(error);
     }
   };
 
@@ -119,6 +146,13 @@ const ProductEditScreen = () => {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               />
+              <Form.Control
+                className="my-3"
+                type="file"
+                label="Choose File"
+                onChange={uploadFileHandler}
+              />
+              {imageUploadLoading && <Loader />}
             </Form.Group>
 
             <Form.Group controlId="brand" className="my-3">
