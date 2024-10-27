@@ -9,8 +9,14 @@ import Product from "../models/productModel.js";
  * @access Public
  */
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  try {
+    const products = await Product.find({});
+    res.json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Error fetching products", error });
+    throw new Error("Error fetching products" && error);
+  }
 });
 
 /**
@@ -19,13 +25,19 @@ const getProducts = asyncHandler(async (req, res) => {
  * @access Public
  */
 const getProductsById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  try {
+    const product = await Product.findById(req.params.id);
 
-  if (product) {
-    return res.json(product);
-  } else {
-    res.status(404);
-    throw new Error("Resource Not Found");
+    if (product) {
+      return res.json(product);
+    } else {
+      res.status(404);
+      throw new Error("Resource Not Found");
+    }
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    res.status(500).json({ message: "Error fetching product by ID", error });
+    throw new Error("Error fetching product by ID" && error);
   }
 });
 
@@ -35,20 +47,26 @@ const getProductsById = asyncHandler(async (req, res) => {
  * @access Private/Admin
  */
 const createProduct = asyncHandler(async (req, res) => {
-  const product = new Product({
-    name: "Sample Name",
-    price: 0,
-    user: req.user._id,
-    image: "/images/sample.jpg",
-    brand: "Sample Brand",
-    category: "Sample Category",
-    countInStock: 0,
-    numReviews: 0,
-    description: "Sample Description",
-  });
+  try {
+    const product = new Product({
+      name: "Sample Name",
+      price: 0,
+      user: req.user._id,
+      image: "/images/sample.jpg",
+      brand: "Sample Brand",
+      category: "Sample Category",
+      countInStock: 0,
+      numReviews: 0,
+      description: "Sample Description",
+    });
 
-  const createdProduct = await product.save();
-  res.status(201).json(createdProduct);
+    const createdProduct = await product.save();
+    res.status(201).json(createdProduct);
+  } catch (error) {
+    console.error("Error creating product:", error);
+    res.status(500).json({ message: "Error creating product", error });
+    throw new Error("Error creating product" && error);
+  }
 });
 
 /**
@@ -58,19 +76,16 @@ const createProduct = asyncHandler(async (req, res) => {
  */
 const updateProduct = asyncHandler(async (req, res) => {
   try {
-    const { name, price, description, image, brand, category, countInStock } =
-      req.body;
-
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      product.name = name;
-      product.price = price;
-      product.description = description;
-      product.image = image;
-      product.brand = brand;
-      product.category = category;
-      product.countInStock = countInStock;
+      product.name = req.body.name || product.name;
+      product.price = req.body.price || product.price;
+      product.description = req.body.description || product.description;
+      product.image = req.body.image || product.image;
+      product.brand = req.body.brand || product.brand;
+      product.category = req.body.category || product.category;
+      product.countInStock = req.body.countInStock || product.countInStock;
 
       const updatedProduct = await product.save();
       res.json(updatedProduct);
@@ -79,9 +94,9 @@ const updateProduct = asyncHandler(async (req, res) => {
       throw new Error("Product not found");
     }
   } catch (error) {
-    res.status(1500);
+    res.status(500).status(error);
     console.log(error);
-    throw new Error(error?.message);
+    throw new Error(error);
   }
 });
 
@@ -117,9 +132,9 @@ const deleteProduct = asyncHandler(async (req, res) => {
       throw new Error("Product not found");
     }
   } catch (error) {
-    res.status(500);
+    res.status(500).json({ error });
     console.log(error);
-    throw new Error(error?.message || "Error deleting product");
+    throw new Error(error?.message && "Error deleting product");
   }
 });
 

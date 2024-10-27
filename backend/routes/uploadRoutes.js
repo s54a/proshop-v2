@@ -34,16 +34,22 @@ const upload = multer({ storage, fileFilter });
 const uploadSingleImage = upload.single("image");
 
 router.post("/", (req, res) => {
-  uploadSingleImage(req, res, function (err) {
-    if (err) {
-      return res.status(400).send({ message: err.message });
-    }
+  try {
+    uploadSingleImage(req, res, function (err) {
+      if (err) {
+        return res.status(400).send({ message: err.message });
+      }
 
-    res.status(200).send({
-      message: "Image uploaded successfully",
-      image: `/${req.file.path}`, // This is the key change
+      res.status(200).send({
+        message: "Image uploaded successfully",
+        image: `/${req.file.path}`,
+      });
     });
-  });
+  } catch (error) {
+    res.status(500).send({ message: "Server error during file upload", error });
+    console.log(error);
+    throw new Error(error);
+  }
 });
 
 export default router;

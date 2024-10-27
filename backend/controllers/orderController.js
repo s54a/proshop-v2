@@ -10,31 +10,10 @@ import Order from "../models/orderModel.js";
 
 const addOrderItems = asyncHandler(async (req, res) => {
   try {
-    // console.log("Received order data:", req.body);
-
-    const {
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-    } = req.body;
-
     if (!orderItems || orderItems.length === 0) {
       res.status(400);
       throw new Error("Order Items are required");
     }
-
-    // Log each field to check for undefined values
-    // console.log("orderItems:", orderItems);
-    // console.log("shippingAddress:", shippingAddress);
-    // console.log("paymentMethod:", paymentMethod);
-    // console.log("itemsPrice:", itemsPrice);
-    // console.log("taxPrice:", taxPrice);
-    // console.log("shippingPrice:", shippingPrice);
-    // console.log("totalPrice:", totalPrice);
 
     if (!req.user || !req.user._id) {
       res.status(401);
@@ -42,33 +21,29 @@ const addOrderItems = asyncHandler(async (req, res) => {
     }
 
     const order = new Order({
-      orderItems: orderItems.map((x) => ({
+      orderItems: req.body.orderItems.map((x) => ({
         ...x,
         product: x._id,
         _id: undefined,
       })),
       user: req.user._id,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
+      shippingAddress: req.body.shippingAddress,
+      paymentMethod: req.body.paymentMethod,
+      itemsPrice: req.body.itemsPrice,
+      taxPrice: req.body.taxPrice,
+      shippingPrice: req.body.shippingPrice,
+      totalPrice: req.body.totalPrice,
     });
 
-    // console.log("Created order object:", order);
-
     const createdOrder = await order.save();
-    // console.log("Order saved successfully:", createdOrder);
 
     res.status(201).json(createdOrder);
   } catch (error) {
     console.error("Error in addOrderItems:", error);
     res.status(500).json({
-      message: "Server error",
-      error: error.message,
-      stack: error.stack,
+      error,
     });
+    throw new Error(error);
   }
 });
 
@@ -78,8 +53,16 @@ const addOrderItems = asyncHandler(async (req, res) => {
  * @access Private
  */
 const getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id });
-  res.status(200).json(orders);
+  try {
+    const orders = await Order.find({ user: req.user._id });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error in getMyOrders:", error);
+    res.status(500).json({
+      error,
+    });
+    throw new Error(error);
+  }
 });
 
 /**
@@ -88,16 +71,24 @@ const getMyOrders = asyncHandler(async (req, res) => {
  * @access Private
  */
 const getOrdersById = asyncHandler(async (req, res) => {
-  const orders = await Order.findById(req.params.id).populate(
-    "user",
-    "name email"
-  );
+  try {
+    const orders = await Order.findById(req.params.id).populate(
+      "user",
+      "name email"
+    );
 
-  if (orders) {
-    res.status(200).json(orders);
-  } else {
-    res.status(404);
-    throw new Error("Order not found");
+    if (orders) {
+      res.status(200).json(orders);
+    } else {
+      res.status(404);
+      throw new Error("Order not found");
+    }
+  } catch (error) {
+    console.error("Error in getOrdersById:", error);
+    res.status(500).json({
+      error,
+    });
+    throw new Error(error);
   }
 });
 
@@ -129,7 +120,8 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.send(401).json(error);
+    res.send(500).json(error);
+    throw new Error(error);
   }
 });
 
@@ -154,7 +146,8 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.send(401).json(error);
+    res.send(500).json(error);
+    throw new Error(error);
   }
 });
 
@@ -164,8 +157,14 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
  * @access Private/Admin
  */
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate("user", "id name");
-  res.status(200).json(orders);
+  try {
+    const orders = await Order.find({}).populate("user", "id name");
+    res.status(200).json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+    throw new Error(error);
+  }
 });
 
 export {
