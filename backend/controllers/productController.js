@@ -198,6 +198,28 @@ const createProductReviews = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc Get Top Rated Products
+ * @route GET /api/products/top
+ * @access Public
+ */
+const getTopProducts = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+    if (product) {
+      return res.status(200).json(product);
+    } else {
+      res.status(404);
+      throw new Error("Resource Not Found");
+    }
+  } catch (error) {
+    console.error("Error fetching top product:", error);
+    res.status(500).json({ message: "Error fetching top product", error });
+    throw new Error(`Error fetching products: ${error.message}`);
+  }
+});
+
 export {
   getProducts,
   getProductsById,
@@ -205,4 +227,5 @@ export {
   updateProduct,
   deleteProduct,
   createProductReviews,
+  getTopProducts,
 };
