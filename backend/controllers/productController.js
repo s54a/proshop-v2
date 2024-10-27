@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from "../models/productModel.js";
 
@@ -29,7 +31,7 @@ const getProductsById = asyncHandler(async (req, res) => {
 
 /**
  * @desc Create a Product
- * @route Post /api/products
+ * @route POST /api/products
  * @access Private/Admin
  */
 const createProduct = asyncHandler(async (req, res) => {
@@ -51,7 +53,7 @@ const createProduct = asyncHandler(async (req, res) => {
 
 /**
  * @desc Update a Product
- * @route Put /api/products/:id
+ * @route PUT /api/products/:id
  * @access Private/Admin
  */
 const updateProduct = asyncHandler(async (req, res) => {
@@ -83,4 +85,48 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
-export { getProducts, getProductsById, createProduct, updateProduct };
+/**
+ * @desc Delete a Product and its associated image
+ * @route DELETE /api/products/:id
+ * @access Private/Admin
+ */
+const deleteProduct = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    // Delete the image if it exists
+    if (product.image) {
+      const imagePath = product.image.startsWith("/")
+        ? product.image.slice(1)
+        : product.image;
+
+      const fullPath = path.join(process.cwd(), imagePath);
+
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+      }
+    }
+
+    if (product) {
+      await Product.deleteOne({ _id: product._id });
+      res.status(200).json({
+        message: "Product and associated image deleted successfully",
+      });
+    } else {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+  } catch (error) {
+    res.status(500);
+    console.log(error);
+    throw new Error(error?.message || "Error deleting product");
+  }
+});
+
+export {
+  getProducts,
+  getProductsById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};
