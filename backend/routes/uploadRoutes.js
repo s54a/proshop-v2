@@ -1,4 +1,3 @@
-import fs from "fs";
 import path from "path";
 import express from "express";
 import multer from "multer";
@@ -27,8 +26,7 @@ function fileFilter(req, file, cb) {
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb("Images only!");
-    // cb(new Error("Images only!"), false);
+    cb(new Error("Images only!"), false);
   }
 }
 
@@ -41,25 +39,10 @@ router.post("/", (req, res) => {
       return res.status(400).send({ message: err.message });
     }
 
-    // Normalize the path using path.posix to ensure forward slashes
-    const imagePath = path.posix.join(
-      "/",
-      req.file.path.split(path.sep).join("/")
-    );
-
-    // Removes / from in front of the upload word
-    // const imagePath = req.file.path.split(path.sep).join("/");
-
     res.status(200).send({
       message: "Image uploaded successfully",
-      image: imagePath,
-      // image: `/${req.file.path}`,
+      image: `/${req.file.path}`, // This is the key change
     });
-    console.log(req.file.path, imagePath);
-    const __dirname = path.resolve();
-    console.log("Full image path:", path.join(__dirname, req.file.path));
-    const imagePath2 = path.join(__dirname, req.file.path);
-    console.log("Image exists:", fs.existsSync(imagePath2));
   });
 });
 

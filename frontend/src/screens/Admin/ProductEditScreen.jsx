@@ -153,6 +153,25 @@ const ProductEditScreen = () => {
                 onChange={uploadFileHandler}
               />
               {imageUploadLoading && <Loader />}
+              {/* Add this debugging information */}
+              <div className="mt-2">
+                <small>Current image path: {image}</small>
+              </div>
+
+              {image && (
+                <img
+                  src={image}
+                  alt="Product"
+                  style={{ maxWidth: "200px", marginTop: "10px" }}
+                  onError={(e) => {
+                    console.error("Image failed to load:", e.target.src);
+                    console.log(
+                      "Complete image URL:",
+                      new URL(e.target.src, window.location.origin)
+                    );
+                  }}
+                />
+              )}
             </Form.Group>
 
             <Form.Group controlId="brand" className="my-3">
