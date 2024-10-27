@@ -7,6 +7,7 @@ import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import Logo from "../assets/logo.png";
 import SearchBox from "./SearchBox";
+import { resetCart } from "../slices/cartSlice";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -21,6 +22,7 @@ const Header = () => {
     try {
       await logoutApiCall();
       dispatch(logout());
+      dispatch(resetCart());
       navigate("/");
     } catch (error) {
       console.log(
