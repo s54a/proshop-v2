@@ -79,6 +79,8 @@ const UserListScreen = () => {
                     textAlign: "center",
                     justifyContent: "space-evenly",
                     verticalAlign: "middle",
+                    margin: "1rem 0",
+                    padding: "0",
                   }}
                 >
                   {!user.isAdmin && (
