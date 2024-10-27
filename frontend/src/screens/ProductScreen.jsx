@@ -19,6 +19,7 @@ import {
 import { addToCart } from "../slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Meta from "../components/Meta";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -72,10 +73,19 @@ const ProductScreen = () => {
         </Message>
       ) : (
         <>
-          <Link className="btn btn-light my-3" to="/">
+          <Link
+            to="/"
+            className="btn  my-3 text-white"
+            style={{ backgroundColor: "#7b8a8b" }}
+          >
             Go Back
           </Link>
           <>
+            <Meta
+              title={product.name}
+              description={product.description}
+              keywords={product.name}
+            />
             <Row>
               <Col md={5}>
                 <Image src={product.image} alt={product.name} fluid />
