@@ -5,6 +5,7 @@ import Message from "../components/Message";
 import { useGetProductsQuery } from "../slices/productApiSlice";
 import { useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
+import { Link } from "react-router-dom";
 
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
@@ -14,6 +15,15 @@ const HomeScreen = () => {
   });
   return (
     <>
+      {keyword && (
+        <Link
+          to={`/`}
+          className="btn  my-3 text-white"
+          style={{ backgroundColor: "#7b8a8b" }}
+        >
+          Go Back
+        </Link>
+      )}
       {isLoading ? (
         <Loader />
       ) : error ? (
