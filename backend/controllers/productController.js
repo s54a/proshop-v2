@@ -10,12 +10,19 @@ import Product from "../models/productModel.js";
  */
 const getProducts = asyncHandler(async (req, res) => {
   try {
-    const products = await Product.find({});
-    res.json(products);
+    const pageSize = 2;
+    const page = Number(req.query.pageNumber) || 1;
+    const count = await Product.countDocuments();
+
+    const products = await Product.find({})
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+
+    res.json({ products, page, pages: Math.ceil(count / pageSize) });
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ message: "Error fetching products", error });
-    throw new Error("Error fetching products" && error);
+    throw new Error(`Error fetching products: ${error.message}`);
   }
 });
 
@@ -37,7 +44,7 @@ const getProductsById = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Error fetching product by ID:", error);
     res.status(500).json({ message: "Error fetching product by ID", error });
-    throw new Error("Error fetching product by ID" && error);
+    throw new Error(`Error fetching products: ${error.message}`);
   }
 });
 
@@ -65,7 +72,7 @@ const createProduct = asyncHandler(async (req, res) => {
   } catch (error) {
     console.error("Error creating product:", error);
     res.status(500).json({ message: "Error creating product", error });
-    throw new Error("Error creating product" && error);
+    throw new Error(`Error fetching products: ${error.message}`);
   }
 });
 

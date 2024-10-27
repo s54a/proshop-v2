@@ -3,9 +3,11 @@ import Product from "../components/Product";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { useGetProductsQuery } from "../slices/productApiSlice";
+import { useParams } from "react-router-dom";
 
 const HomeScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { pageNumber } = useParams();
+  const { data, isLoading, error } = useGetProductsQuery({ pageNumber });
   return (
     <>
       {isLoading ? (
@@ -18,7 +20,7 @@ const HomeScreen = () => {
         <>
           <h1>Latest Product</h1>
           <Row>
-            {products.map((product) => (
+            {data.products.map((product) => (
               <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
                 <Product product={product} />
               </Col>
