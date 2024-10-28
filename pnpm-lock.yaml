@@ -17,6 +17,9 @@ importers:
       cookie-parser:
         specifier: ^1.4.6
         version: 1.4.6
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       express:
         specifier: ^4.19.2
         version: 4.21.0
@@ -33,9 +36,6 @@ importers:
       concurrently:
         specifier: ^8.2.2
         version: 8.2.2
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
       nodemon:
         specifier: ^3.1.4
         version: 3.1.6
