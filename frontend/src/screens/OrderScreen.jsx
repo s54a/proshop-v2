@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
+  const { userInfo } = useSelector((state) => state.auth);
 
   const {
     data: order,
@@ -36,7 +37,13 @@ const OrderScreen = () => {
     error: errorPayPal,
   } = useGetPaypalClientIdQuery();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  // Add this check
+  const isOrderCreator =
+    order && userInfo && order.user._id.toString() === userInfo._id;
+
+  // For debugging, you can log like this:
+  // console.log("Order user ID:", order?.user?._id?.toString());
+  // console.log("Current user ID:", userInfo?._id);
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
@@ -59,11 +66,11 @@ const OrderScreen = () => {
     }
   }, [order, paypal, paypalDispatch, errorPayPal, loadingPayPal]);
 
-  async function onApproveTest() {
-    await payOrder({ orderId, details: { payer: {} } });
-    refetch();
-    toast.success("Order Paid Successfully");
-  }
+  // async function onApproveTest() {
+  //   await payOrder({ orderId, details: { payer: {} } }).unwrap();
+  //   refetch();
+  //   toast.success("Order Paid Successfully");
+  // }
 
   function createOrder(data, actions) {
     return actions.order
@@ -214,7 +221,7 @@ const OrderScreen = () => {
                 </Row>
               </ListGroup.Item>
 
-              {!order.isPaid && (
+              {!order.isPaid && isOrderCreator && (
                 <ListGroup.Item>
                   {isPayLoading && <Loader />}
 
@@ -222,13 +229,13 @@ const OrderScreen = () => {
                     <Loader />
                   ) : (
                     <div>
-                      <Button
+                      {/* <Button
                         style={{ marginBottom: "10px" }}
                         onClick={onApproveTest}
                         className="w-100 font-bold"
                       >
                         Test Pay Order
-                      </Button>
+                      </Button> */}
                       <div>
                         <PayPalButtons
                           createOrder={createOrder}
