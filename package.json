@@ -11,7 +11,7 @@
     "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"green,blue\" \"pnpm run server\" \"pnpm run client\"",
     "data:import": "node backend/seeder.js",
     "data:destroy": "node backend/seeder.js -d",
-    "build": "cd frontend && pnpm install && pnpm build"
+    "build": "pnpm install && cd frontend && pnpm install && pnpm build"
   },
   "repository": {
     "type": "git",
