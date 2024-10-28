@@ -25,6 +25,9 @@ app.use(cookieParser());
 
 const __dirname = path.resolve();
 
+// Serve uploaded files in both development and production
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
@@ -42,7 +45,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
   );
 } else {
-  app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
   app.get("/", (req, res) => {
     res.send("API is running....");
   });
