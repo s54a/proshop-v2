@@ -4,6 +4,10 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    outDir: "../dist", // Output to root level
+    emptyOutDir: true, // Clean the output directory before build
+  },
   server: {
     port: 3000,
     proxy: {
